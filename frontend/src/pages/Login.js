@@ -6,23 +6,22 @@ import './Login.css'; // Make sure to import the CSS file
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('user');
+  const [role, setRole] = useState('user'); // Keep the role state for potential UI logic
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    if (!username || !password) {
+    if (!username || !password || !role) {
       setError('All fields are required');
       return;
     }
 
     try {
+      // Send username, password, and role in the request body
       const response = await axios.post('http://localhost:5000/login', { username, password, role });
       if (response.status === 200) {
-        // Store JWT token in local storage
-        localStorage.setItem('token', response.data.token);
-        // Redirect to tracking page upon successful login
+        // Redirect based on role (this logic is client-side only)
         navigate(role === 'admin' ? '/admin' : '/track');
       } else {
         setError('Login failed. Please check your credentials.');
